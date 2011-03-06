@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-BEGIN { require 5.010; }
+BEGIN { require 5.006; }
 
 use ExtUtils::MakeMaker 6.31;
 
@@ -29,13 +29,11 @@ my %WriteMakefileArgs = (
     'Carp' => '0',
     'Config::Any' => '0.13',
     'English' => '0',
-    'Modern::Perl' => '0',
     'Mouse' => '0.35',
     'Mouse::Role' => '0',
-    'MouseX::ConfigFromFile' => '0.02',
-    'utf8' => '0'
+    'MouseX::ConfigFromFile' => '0.02'
   },
-  'VERSION' => '0.10',
+  'VERSION' => '0.11',
   'test' => {
     'TESTS' => 't/*.t'
   }

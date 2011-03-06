@@ -25,12 +25,10 @@
             "Carp" : 0,
             "Config::Any" : "0.13",
             "English" : 0,
-            "Modern::Perl" : 0,
             "Mouse" : "0.35",
             "Mouse::Role" : 0,
             "MouseX::ConfigFromFile" : "0.02",
-            "perl" : "5.010",
-            "utf8" : 0
+            "perl" : "5.006"
          }
       },
       "test" : {
@@ -54,6 +52,6 @@
          "web" : "http://github.com/mjg/mousex-simpleconfig"
       }
    },
-   "version" : "0.10"
+   "version" : "0.11"
 }
 

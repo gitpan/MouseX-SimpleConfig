@@ -6,14 +6,14 @@
 # This is free software; you can redistribute it and/or modify it under
 # the same terms as the Perl 5 programming language system itself.
 #
-use utf8;
+use 5.006;
 use strict;
-use Modern::Perl;    ## no critic (UselessNoCritic,RequireExplicitPackage)
+use warnings;
 
 package MouseX::SimpleConfig;
 
 BEGIN {
-    $MouseX::SimpleConfig::VERSION = '0.10';
+    $MouseX::SimpleConfig::VERSION = '0.11';
 }
 
 # ABSTRACT: A Mouse role for setting attributes from a simple configfile
@@ -29,22 +29,21 @@ sub get_config_from_file {
     my ( $class, $file ) = @ARG;
 
     my $files_ref;
-    given ( ref $file ) {
-        when ('CODE')  { $file      = $file->() }
-        when ('ARRAY') { $files_ref = $file }
-        default        { $files_ref = [$file] }
+    for ( ref $file ) {
+        $ARG eq 'CODE'  and do { $file      = $file->(); last };
+        $ARG eq 'ARRAY' and do { $files_ref = $file;     last };
+        $files_ref = [$file];
     }
 
     my $can_config_any_args = $class->can('config_any_args');
-    my $extra_args
-        = $can_config_any_args ? $can_config_any_args->( $class, $file ) : {};
-    my $raw_cfany = Config::Any->load_files(
-        {   %{$extra_args},
-            use_ext         => 1,
-            files           => $files_ref,
-            flatten_to_hash => 1,
-        }
-    );
+    my %cfany_args;
+    if ($can_config_any_args) {
+        %cfany_args = %{ $can_config_any_args->( $class, $file ) };
+    }
+    $cfany_args{use_ext}         = 1;
+    $cfany_args{files}           = $files_ref;
+    $cfany_args{flatten_to_hash} = 1;
+    my $raw_cfany = Config::Any->load_files( \%cfany_args );
 
     my %raw_config;
     foreach my $file_tested ( reverse @{$files_ref} ) {
@@ -76,15 +75,13 @@ __END__
 
 =for :stopwords Brandon L. Black Mark Gardner Infinity Interactive
 
-=encoding utf8
-
 =head1 NAME
 
 MouseX::SimpleConfig - A Mouse role for setting attributes from a simple configfile
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
@@ -188,8 +185,6 @@ Class method called internally by either C<new_with_config> or
 L<MouseX::Getopt|MouseX::Getopt>'s
 C<new_with_options>.  Invokes L<Config::Any|Config::Any> to parse
 C<configfile>.
-
-=encoding utf8
 
 =head1 BUGS
 

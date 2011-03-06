@@ -3,7 +3,7 @@ NAME
     configfile
 
 VERSION
-    version 0.10
+    version 0.11
 
 SYNOPSIS
       ## A YAML configfile named /etc/my_app.yaml:
